@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Finance Dashboard</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<!-- ── SIDEBAR ─────────────────────────────────────────── -->
+<div class="sidebar">
+  <div class="logo">💰 FinanceIQ</div>
+  <nav>
+    <a href="#" class="nav-item active" onclick="showSection('dashboard')">📊 Dashboard</a>
+    <a href="#" class="nav-item" onclick="showSection('expenses')">📋 Expenses</a>
+    <a href="#" class="nav-item" onclick="showSection('insights')">🤖 AI Insights</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <button class="theme-btn" onclick="toggleTheme()">🌙 Dark Mode</button>
+  </div>
+</div>
+
+<!-- ── MAIN CONTENT ────────────────────────────────────── -->
+<div class="main">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <h1 class="page-title" id="page-title">Dashboard</h1>
+    <div class="topbar-actions">
+      <button class="btn btn-secondary" onclick="loadDemo()">🎲 Load Demo</button>
+      <button class="btn btn-danger" onclick="clearDemo()">🗑️ Clear Demo</button>
+      <button class="btn btn-primary" onclick="openModal()">+ Add Expense</button>
+      <button class="btn btn-secondary" onclick="doLogout()">🚪 Logout</button>
+    </div>
+  </div>
+
+  <!-- ── DASHBOARD SECTION ────────────────────────────── -->
+  <section id="section-dashboard">
+
+    <!-- Summary Cards -->
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">💸</div>
+        <div class="card-info">
+          <span class="card-label">Total Spent</span>
+          <span class="card-value" id="total-spent">₹0</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon">📅</div>
+        <div class="card-info">
+          <span class="card-label">This Month</span>
+          <span class="card-value" id="this-month">₹0</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <div class="card-info">
+          <span class="card-label">Avg Expense</span>
+          <span class="card-value" id="avg-expense">₹0</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏆</div>
+        <div class="card-info">
+          <span class="card-label">Highest</span>
+          <span class="card-value" id="highest-expense">₹0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-grid">
+      <div class="chart-box">
+        <h3>Spending by Category</h3>
+        <canvas id="categoryChart"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Monthly Trend</h3>
+        <canvas id="monthlyChart"></canvas>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── EXPENSES SECTION ──────────────────────────────── -->
+  <section id="section-expenses" style="display:none">
+    <div class="expenses-header">
+      <input type="text" id="search-input" class="search-box" placeholder="🔍 Search expenses..." oninput="filterExpenses()"/>
+      <select id="filter-category" class="filter-select" onchange="filterExpenses()">
+        <option value="">All Categories</option>
+      </select>
+    </div>
+    <div class="table-box">
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Note</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="expenses-table"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── INSIGHTS SECTION ─────────────────────────────── -->
+  <section id="section-insights" style="display:none">
+    <div id="insights-container" class="insights-grid"></div>
+  </section>
+
+</div>
+
+<!-- ── ADD/EDIT MODAL ──────────────────────────────────── -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal()"></div>
+<div class="modal" id="modal">
+  <div class="modal-header">
+    <h2 id="modal-title">Add Expense</h2>
+    <button class="modal-close" onclick="closeModal()">✕</button>
+  </div>
+  <div class="modal-body">
+    <input type="hidden" id="expense-id"/>
+    <div class="form-group">
+      <label>Title</label>
+      <input type="text" id="f-title" class="form-input" placeholder="e.g. Lunch at restaurant"/>
+    </div>
+    <div class="form-group">
+      <label>Amount (₹)</label>
+      <input type="number" id="f-amount" class="form-input" placeholder="e.g. 350"/>
+    </div>
+    <div class="form-group">
+      <label>Category</label>
+      <select id="f-category" class="form-input"></select>
+    </div>
+    <div class="form-group">
+      <label>Date</label>
+      <input type="date" id="f-date" class="form-input"/>
+    </div>
+    <div class="form-group">
+      <label>Note (optional)</label>
+      <input type="text" id="f-note" class="form-input" placeholder="Any note..."/>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="saveExpense()">Save Expense</button>
+  </div>
+</div>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>

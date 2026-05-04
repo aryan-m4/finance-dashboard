@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome — FinanceIQ</title>
+  <style>
+    :root {
+      --bg: #f4f6fb; --surface: #ffffff; --border: #e2e8f0;
+      --text: #1a202c; --muted: #718096;
+      --primary: #6c63ff; --primary-hover: #574fd6;
+    }
+    [data-theme="dark"] {
+      --bg: #0f1117; --surface: #1a1d27;
+      --border: #2d3148; --text: #e2e8f0; --muted: #a0aec0;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg); color: var(--text);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.3s;
+    }
+    .welcome-box {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 56px 48px;
+      text-align: center;
+      max-width: 480px;
+      width: 90%;
+      box-shadow: 0 8px 32px rgba(108,99,255,0.10);
+    }
+    .welcome-emoji { font-size: 4rem; margin-bottom: 16px; }
+    .welcome-title {
+      font-size: 1.8rem; font-weight: 800;
+      margin-bottom: 8px; color: var(--primary);
+    }
+    .welcome-name  { font-size: 1.1rem; color: var(--muted); margin-bottom: 32px; }
+    .welcome-cards {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; margin-bottom: 32px;
+    }
+    .welcome-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 10px; padding: 16px 12px;
+      font-size: 0.88rem; color: var(--muted);
+    }
+    .welcome-card span { display: block; font-size: 1.5rem; margin-bottom: 6px; }
+    .btn-go {
+      padding: 14px 32px;
+      border-radius: 10px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 1rem; font-weight: 700;
+      border: none; cursor: pointer;
+      transition: background 0.2s;
+      width: 100%;
+    }
+    .btn-go:hover { background: var(--primary-hover); }
+    .logout-link {
+      display: block; margin-top: 16px;
+      font-size: 0.85rem; color: var(--muted);
+      cursor: pointer; text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<div class="welcome-box">
+  <div class="welcome-emoji">👋</div>
+  <div class="welcome-title">Welcome back!</div>
+  <div class="welcome-name" id="user-name">Loading...</div>
+
+  <div class="welcome-cards">
+    <div class="welcome-card"><span>📊</span>Track Expenses</div>
+    <div class="welcome-card"><span>🤖</span>AI Insights</div>
+    <div class="welcome-card"><span>📈</span>Monthly Trends</div>
+    <div class="welcome-card"><span>🌙</span>Dark Mode</div>
+  </div>
+
+  <button class="btn-go" onclick="window.location.href='/dashboard'">
+    Go to Dashboard →
+  </button>
+  <a class="logout-link" onclick="doLogout()">Not you? Logout</a>
+</div>
+
+<script>
+  // Load user info
+  fetch('/api/me')
+    .then(r => r.json())
+    .then(data => {
+      document.getElementById('user-name').textContent =
+        `Hello, ${data.name}! Ready to track your finances?`;
+    })
+    .catch(() => window.location.href = '/');
+
+  async function doLogout() {
+    await fetch('/api/logout', { method: 'POST' });
+    window.location.href = '/';
+  }
+</script>
+</body>
+</html>
